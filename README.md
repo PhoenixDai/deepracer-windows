@@ -60,3 +60,6 @@ The following parts are based on the code in ```sourcedir.tar.gz```. I think it 
 ### Change they way s3 client build keys for minio
 In ```s3_client.py```, ```s3_boto_data_store.py``` and ```training_worker.py```, Python's ```os.path.normpath``` was used to build the keys for unload/download files to/from minio server. However, it will use ```\\``` to replace ```/``` in the keys, which in incompatible with minio's way of path to files. So, I simply skipped ```os.path.normpath``` and build the key strings direstly with ```/```. (See commit [877325c](https://github.com/PhoenixDai/deepracer-windows/commit/877325c8a7389b210c7b9fe0f2c2b55bf009de67) and [aea76ec](https://github.com/PhoenixDai/deepracer-windows/commit/aea76ec2875caed9ee9596fc21d8113768998af9) for the changes I made.) Please feel free to advise if you have better ways to handle this issue. 
 
+### Get hyperparameter from file pointed by SM_TRAINING_ENV
+I didn't spend much time on figuring out how hyperparameters were passed from SageMaker to rl_coach. I think it would be more straight forward to load from the file pointed by ```SM_TRAINING_ENV```. (See commit [0751522](https://github.com/PhoenixDai/deepracer-windows/commit/0751522717a48ba080211143802316469a925a0f) for details.)
+
