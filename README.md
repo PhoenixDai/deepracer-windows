@@ -11,3 +11,16 @@ This repo provides some instructions on training deepracer locally on Windows. I
 - [Docker on Windows](https://www.docker.com/products/docker-desktop)
 - Anaconda is optional but it could save you a lot of time by installing CUDA, etc. automatically.
 - Get a local copy of the [deepracer](https://github.com/aws-deepracer-community/deepracer) repo.
+
+## Minio
+Download the binary from [Minio](https://min.io/download#/windows) and put it somewhere you're okay with having large files. For example:
+```cmd
+set MINIO_ACCESS_KEY=minio
+set MINIO_SECRET_KEY=miniokey
+minio.exe server D:\Data
+```
+
+You will need to create a bucket (with the '+' sign at lower right corner of the web interface) named bucket through the web GUI that minio provides, just open http://127.0.0.1:9000 in your browser.
+
+Then copy the folder custom_files from **deepracer** into your new bucket as that's where the defaults expect them to be.
+
