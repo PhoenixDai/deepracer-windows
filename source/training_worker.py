@@ -207,8 +207,9 @@ def main():
         from markov.sagemaker_graph_manager import get_graph_manager
         params_blob = os.environ.get('SM_TRAINING_ENV', '')
         if params_blob:
-            params = json.loads(params_blob)
-            sm_hyperparams_dict = params["hyperparameters"]
+            # params = json.loads(params_blob)
+            # sm_hyperparams_dict = params["hyperparameters"]
+			sm_hyperparams_dict = json.load(open(params_blob))
         else:
             sm_hyperparams_dict = {}
         graph_manager, robomaker_hyperparams_json = get_graph_manager(**sm_hyperparams_dict)
