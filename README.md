@@ -43,3 +43,9 @@ Then, coach can be installed with ```pip```. (It't not available with Anaconda.)
 pip3 install rl_coach
 conda install boto3
 ```
+
+## Redis
+Redis server can be started with docker:
+```cmd
+docker run --name redis --rm -p 6379:6379 -it redis
+```
