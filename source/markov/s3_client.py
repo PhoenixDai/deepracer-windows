@@ -19,10 +19,14 @@ class SageS3Client():
         self.aws_region = aws_region
         self.bucket = bucket
         self.s3_prefix = s3_prefix
-        self.config_key = os.path.normpath(s3_prefix + "/ip/ip.json")
-        self.hyperparameters_key = os.path.normpath(s3_prefix + "/ip/hyperparameters.json")
-        self.done_file_key = os.path.normpath(s3_prefix + "/ip/done")
-        self.model_checkpoints_prefix = os.path.normpath(s3_prefix + "/model/") + "/"
+        # self.config_key = os.path.normpath(s3_prefix + "/ip/ip.json")
+        self.config_key = s3_prefix + "/ip/ip.json"
+        # self.hyperparameters_key = os.path.normpath(s3_prefix + "/ip/hyperparameters.json")
+        self.hyperparameters_key = s3_prefix + "/ip/hyperparameters.json"
+        # self.done_file_key = os.path.normpath(s3_prefix + "/ip/done")
+        self.done_file_key = s3_prefix + "/ip/done"
+        # self.model_checkpoints_prefix = os.path.normpath(s3_prefix + "/model/") + "/"
+        self.model_checkpoints_prefix = s3_prefix + "/model/"
         self.lock_file = ".lock"
         logger.info("Initializing SageS3Client...")
 
@@ -32,7 +36,8 @@ class SageS3Client():
         return session.client('s3', region_name=self.aws_region, endpoint_url=s3_url)
 
     def _get_s3_key(self, key):
-        return os.path.normpath(self.model_checkpoints_prefix + "/" + key)
+        # return os.path.normpath(self.model_checkpoints_prefix + "/" + key)
+        return self.model_checkpoints_prefix + key
 
     def write_ip_config(self, ip):
         s3_client = self.get_client()
@@ -76,7 +81,7 @@ class SageS3Client():
                 if "Contents" not in response:
                     # If no lock is found, try getting the checkpoint
                     try:
-                        key = self._get_s3_key("checkpoint")
+                        key = self._get_s3_key("checkpoint").replace('\\','/')
                         logger.info("Downloading %s" % key)
                         s3_client.download_file(Bucket=self.bucket,
                                                 Key=key,

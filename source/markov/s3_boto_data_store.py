@@ -35,14 +35,19 @@ class S3BotoDataStoreParameters(DataStoreParameters):
 class S3BotoDataStore(DataStore):
     def __init__(self, params: S3BotoDataStoreParameters):
         self.params = params
-        self.key_prefix = os.path.normpath(self.params.s3_folder + "/model")
-        self.ip_data_key = os.path.normpath(self.params.s3_folder + "/ip/ip.json")
-        self.ip_done_key = os.path.normpath(self.params.s3_folder + "/ip/done")
-        self.preset_data_key = os.path.normpath(self.params.s3_folder + "/presets/preset.py")
+        self.key_prefix = self.params.s3_folder + "/model"
+        # self.key_prefix = os.path.normpath(self.params.s3_folder + "/model")
+        self.ip_data_key = self.params.s3_folder + "/ip/ip.json"
+        # self.ip_data_key = os.path.normpath(self.params.s3_folder + "/ip/ip.json")
+        self.ip_done_key = self.params.s3_folder + "/ip/done"
+        # self.ip_done_key = os.path.normpath(self.params.s3_folder + "/ip/done")
+        self.preset_data_key = self.params.s3_folder + "/presets/preset.py"
+        # self.preset_data_key = os.path.normpath(self.params.s3_folder + "/presets/preset.py")
         self.graph_manager = None
 
     def _get_s3_key(self, key):
-        return os.path.normpath(self.key_prefix + "/" + key)
+        # return os.path.normpath(self.key_prefix + "/" + key)
+        return self.key_prefix + "/" + key
 
     def _get_client(self):
         session = boto3.session.Session()
