@@ -24,6 +24,12 @@ You will need to create a bucket (with the '+' sign at lower right corner of the
 
 Then copy the folder custom_files from **deepracer** into your new bucket as that's where the defaults expect them to be.
 
+## Redis
+Redis server can be started with docker:
+```cmd
+docker run --name redis --rm -p 6379:6379 -it redis
+```
+
 ## Coach on Windows
 [Coach](https://nervanasystems.github.io/coach/) is package that does the training work behind SageMaker. So, after I figured out how to train with coach directly, I think it's probably easier to get started with coach directly. Althrough the docs of coach says it's only been tested on Ubuntu, it actually also works on Windows almost out of the box. 
 
@@ -43,11 +49,3 @@ Then, coach can be installed with ```pip```. (It't not available with Anaconda.)
 pip3 install rl_coach
 conda install boto3
 ```
-
-## Redis
-Redis server can be started with docker:
-```cmd
-docker run --name redis --rm -p 6379:6379 -it redis
-```
-
-ALGO_MODEL_DIR = D://source/markov/model
