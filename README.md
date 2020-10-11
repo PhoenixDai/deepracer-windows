@@ -24,3 +24,22 @@ You will need to create a bucket (with the '+' sign at lower right corner of the
 
 Then copy the folder custom_files from **deepracer** into your new bucket as that's where the defaults expect them to be.
 
+## Coach on Windows
+[Coach](https://nervanasystems.github.io/coach/) is package that does the training work behind SageMaker. So, after I figured out how to train with coach directly, I think it's probably easier to get started with coach directly. Althrough the docs of coach says it's only been tested on Ubuntu, it actually also works on Windows almost out of the box. 
+
+Let's create a virtual envrionment for coach first. (I'll use Anaconda here, but pip should also work.) **Please Note:** the highest version of Python that supported by both coach and coach compatible TensorFlow is 3.7.9. So, make sure you specify the Python version here to avoid getting incompatible Python installed. 
+```cmd
+conda create -n coach python=3.7.9
+conda activate coach
+```
+
+Now, install TensorFlow (The highest version compatible with coach is 1.14.0)
+```cmd
+conda install tensorflow-gpu=1.14.0
+```
+
+Then, coach can be installed with ```pip```. (It't not available with Anaconda.)
+```cmd
+pip3 install rl_coach
+conda install boto3
+```
