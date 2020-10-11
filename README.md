@@ -49,3 +49,5 @@ Redis server can be started with docker:
 ```cmd
 docker run --name redis --rm -p 6379:6379 -it redis
 ```
+
+ALGO_MODEL_DIR = D://source/markov/model
