@@ -181,7 +181,8 @@ def main():
     # Load the model metadata
     model_metadata_local_path = os.path.join(CUSTOM_FILES_PATH, 'model_metadata.json')
     load_model_metadata(s3_client, args.model_metadata_s3_key, model_metadata_local_path)
-    s3_client.upload_file(os.path.normpath("%s/model/model_metadata.json" % args.s3_prefix), model_metadata_local_path)
+    # s3_client.upload_file(os.path.normpath("%s/model/model_metadata.json" % args.s3_prefix), model_metadata_local_path)
+    s3_client.upload_file("%s/model/model_metadata.json" % args.s3_prefix, model_metadata_local_path)
     shutil.copy2(model_metadata_local_path, SM_MODEL_OUTPUT_DIR)
 
     # Register the gym enviroment, this will give clients the ability to creat the enviroment object
