@@ -72,7 +72,7 @@ It seems the network speed is lower in Windows than Ubuntu. So the data requesti
 Now we are ready (almost) to train deepracer locally. The only thinkg left is to create some folders that the programs need to use. 
 - In the ```bucket``` folder, create a sub-folder ```custome_files```, and place the ```model_metadata.json``` and ```reward.py``` file of your choice over there. If you don't have one, you can get the default ones from ```deepracer``` repo. 
 - In the ```bucket``` folder, create a sub-folder ```rl-deepracer-sagemaker```. In ```rl-deepracer-sagemaker```, create sub-folder ```ip``` and ```model```.
-- In the ```bucket``` folder, create a sub-folder ```rl-deepracer-pretrained```. In ```rl-deepracer-pretrained```, create a sub-folder ```model```. Place a pretrained model here. If you don't have one, you can use the one from ```rl-deepracer-pretrained.zip``` in this repo. (If no pretrained model is provided, the RoboMaker won't start. It's strange but it's not a big issue for me, so I didn't spend time to debug it.)
+- In the ```bucket``` folder, create a sub-folder ```rl-deepracer-pretrained```. In ```rl-deepracer-pretrained```, create a sub-folder ```model```. Place a pretrained model here. If you don't have one, you can use the one [rl-deepracer-pretrained.zip](https://www.dropbox.com/s/f1vr9hetin6650g/rl-deepracer-pretrained.zip?dl=0) I shared. (If no pretrained model is provided, the RoboMaker won't start. It's strange but it's not a big issue for me, so I didn't spend time to debug it.)
 - Create a folder for RoboMaker data. I'll just use ```D:\\data\robo```. It will be used to share files between your PC and RoboMaker container. 
 - In the ```robo``` foler, create a sub-folder ```checkpoint```.
 - Create a temporary data folder. I'll use ```D:\\data\run```. It will be used by the trainer program.
@@ -96,7 +96,7 @@ python D:\\source\training_worker.py --RLCOACH_PRESET deepracer --aws_region us-
 ```
 
 ### Start the simulator (RoboMaker)
-This part should be the easiest. Just open another Windows command line window, go to the folder of your local copy of ```deepracer``` and run:
+This part should be the easiest. Just open another Windows command line window, go to the folder of your local copy of ```deepracer```, update the environment variables in ```robomaker.env``` accordingly and run:
 ```cmd
 docker run --rm --name dr --env-file ./robomaker.env -p 8080:5900 --cpus "6" -v D://deepracer/simulation/aws-robomaker-sample-application-deepracer/simulation_ws/src:/app/robomaker-deepracer/simulation_ws/src -v D://data/robo/checkpoint:/root/.ros/ -it crr0004/deepracer_robomaker:console "./run.sh build distributed_training.launch"
 ```
