@@ -143,7 +143,7 @@ class DeepRacerTrainerBackEnd(MemoryBackend):
                 if self.request_data:
                     # Request the desired episode
                     self.data_client.publish(WORKER_CHANNEL, pickle.dumps(self.episode_req))
-                time.sleep(10*POLL_TIME)
+                time.sleep(1000*POLL_TIME)
             except redis.ConnectionError as ex:
                 log_info("Redis connection error: {}".format(ex))
                 continue
@@ -163,7 +163,9 @@ class DeepRacerTrainerBackEnd(MemoryBackend):
         self.request_data = True
         while episode_counter <= num_consecutive_playing_steps.num_steps:
             try:
+                print(episode_counter, 'fetching data')
                 obj = self.data_queue.get()
+                print(obj[0], 'data fetched')
                 if obj[0] == episode_counter and isinstance(obj[1], Episode):
                     episode_counter += 1
                     self.episode_req = episode_counter
