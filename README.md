@@ -48,6 +48,7 @@ Then, coach can be installed with ```pip```. (It't not available with Anaconda.)
 ```cmd
 pip3 install rl_coach
 conda install boto3
+conda install fsspec
 ```
 
 ## Modify the trainer for Windows
