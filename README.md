@@ -51,7 +51,7 @@ conda install boto3
 ```
 
 ## Modify the trainer for Windows
-If you had ever train deepracer locally on Ubuntu, you may noticed the ```sourcedir.tar.gz``` file shared between SageMaker and RoboMaker containers. It is the same RL source code that used by both sides. 
+If you had ever trained deepracer locally on Ubuntu, you may notice the ```sourcedir.tar.gz``` file shared between SageMaker and RoboMaker containers. It is the same RL source code that used by both sides. 
 - For SageMaker, it takes the states from RoboMaker to train with the RL algorithm. This is the part that's very computational intensive and relies on GPUs the accelerate the process. Since docker on Windows has no access to GPUs so far, we need to run this part locally on Windows. I'll explain how to do this step by step in the sections below. 
 - For RoboMaker (the one with Gazebo), it takes the trained RL algorithm from SageMaker and run simulations for the specified iterations. This part doesn't need GPU, so this part is the same with Chris's instruction. 
 
@@ -62,4 +62,10 @@ In ```s3_client.py```, ```s3_boto_data_store.py``` and ```training_worker.py```,
 
 ### Get hyperparameter from file pointed by SM_TRAINING_ENV
 I didn't spend much time on figuring out how hyperparameters were passed from SageMaker to rl_coach. I think it would be more straight forward to load from the file pointed by ```SM_TRAINING_ENV```. (See commit [0751522](https://github.com/PhoenixDai/deepracer-windows/commit/0751522717a48ba080211143802316469a925a0f) for details.)
+
+### Lower the data requesting frequency
+It seems the network speed is lower in Windows than Ubuntu. So the data requesting frequency in ```deepracer_memory.py``` need to be set to a lower value. So far, ```time.sleep(1000*POLL_TIME)``` works very well. (See commit [3209933](https://github.com/PhoenixDai/deepracer-windows/commit/3209933c58dc082d9d584adabd4cab502a58b57f) for details.)
+
+
+
 
