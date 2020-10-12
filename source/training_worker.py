@@ -209,7 +209,7 @@ def main():
         if params_blob:
             # params = json.loads(params_blob)
             # sm_hyperparams_dict = params["hyperparameters"]
-			sm_hyperparams_dict = json.load(open(params_blob))
+            sm_hyperparams_dict = json.load(open(params_blob))
         else:
             sm_hyperparams_dict = {}
         graph_manager, robomaker_hyperparams_json = get_graph_manager(**sm_hyperparams_dict)
