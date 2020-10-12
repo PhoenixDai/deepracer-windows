@@ -67,6 +67,38 @@ I didn't spend much time on figuring out how hyperparameters were passed from Sa
 ### Lower the data requesting frequency
 It seems the network speed is lower in Windows than Ubuntu. So the data requesting frequency in ```deepracer_memory.py``` need to be set to a lower value. So far, ```time.sleep(1000*POLL_TIME)``` works very well. (See commit [3209933](https://github.com/PhoenixDai/deepracer-windows/commit/3209933c58dc082d9d584adabd4cab502a58b57f) for details.)
 
+## Let's Go
+### One more thing
+Now we are ready (almost) to train deepracer locally. The only thinkg left is to create some folders that the programs need to use. 
+- In the ```bucket``` folder, create a sub-folder ```custome_files```, and place the ```model_metadata.json``` and ```reward.py``` file of your choice over there. If you don't have one, you can get the default ones from ```deepracer``` repo. 
+- In the ```bucket``` folder, create a sub-folder ```rl-deepracer-sagemaker```. In ```rl-deepracer-sagemaker```, create sub-folder ```ip``` and ```model```.
+- In the ```bucket``` folder, create a sub-folder ```rl-deepracer-pretrained```. In ```rl-deepracer-pretrained```, create a sub-folder ```model```. Place a pretrained model here. If you don't have one, you can use the one from ```rl-deepracer-pretrained.zip``` in this repo. (If no pretrained model is provided, the RoboMaker won't start. It's strange but it's not a big issue for me, so I didn't spend time to debug it.)
+- Create a folder for RoboMaker data. I'll just use ```D:\\data\robo```. It will be used to share files between your PC and RoboMaker container. 
+- In the ```robo``` foler, create a sub-folder ```checkpoint```.
+- Create a temporary data folder. I'll use ```D:\\data\run```. It will be used by the trainer program.
 
+### Start the trainer
+Open a Windows command line window and set some environment variables:
+```cmd
+set SAGEMAKER_TRAINING_MODULE=sagemaker_tensorflow_container.training:main
+set AWS_ACCESS_KEY_ID=minio
+set AWS_SECRET_ACCESS_KEY=miniokey
+set AWS_REGION=us-east-1
+set TRAINING_JOB_NAME=rl-deepracer-sagemaker
+set S3_ENDPOINT_URL=http://localhost:9000
+set NODE_TYPE=SAGEMAKER_TRAINING_WORKER
+set SM_TRAINING_ENV=D://data/hyperparameters.json
+set ALGO_MODEL_DIR=D://data/run/model
+```
+Then, go to ```D:\\data\run```. (I'll just use the one I'm using as an example. Same for the folder being used below.) Now, you can run the command below to start your trainer:
+```cmd
+python D:\\source\training_worker.py --RLCOACH_PRESET deepracer --aws_region us-east-1 --model_metadata_s3_key s3://bucket/custom_files/model_metadata.json --pretrained_s3_bucket bucket --pretrained_s3_prefix rl-deepracer-pretrained --s3_bucket bucket --s3_prefix rl-deepracer-sagemaker
+```
 
+### Start the simulator (RoboMaker)
+This part should be the easiest. Just open another Windows command line window, go to the folder of your local copy of ```deepracer``` and run:
+```cmd
+docker run --rm --name dr --env-file ./robomaker.env -p 8080:5900 --cpus "6" -v D://deepracer/simulation/aws-robomaker-sample-application-deepracer/simulation_ws/src:/app/robomaker-deepracer/simulation_ws/src -v D://data/robo/checkpoint:/root/.ros/ -it crr0004/deepracer_robomaker:console "./run.sh build distributed_training.launch"
+```
 
+## Enjoy!
